@@ -2,10 +2,12 @@ import type { EngineInterface, Register, ThemeSetArgs } from 'claude-code'
 
 import { AURORA, AURORA_PROBLEMS, AURORA_SCENE } from './aurora.js'
 import { CATPPUCCIN, CATPPUCCIN_PROBLEMS } from './catppuccin.js'
+import { TOKYO_NIGHT, TOKYO_NIGHT_PROBLEMS } from './tokyo-night.js'
 
 const LOOKS: Record<string, { look: ThemeSetArgs; problems: string[] }> = {
   aurora: { look: AURORA, problems: AURORA_PROBLEMS },
   catppuccin: { look: CATPPUCCIN, problems: CATPPUCCIN_PROBLEMS },
+  'tokyo-night': { look: TOKYO_NIGHT, problems: TOKYO_NIGHT_PROBLEMS },
 }
 const DEFAULT = 'catppuccin'
 
@@ -39,7 +41,7 @@ export const register: Register = on => {
   })
 
   on('command.run', { command: 'look' }, async ($, e) => {
-    const name = e.args.trim().toLowerCase()
+    const name = e.args.trim().toLowerCase().replace(/\s+/g, '-')
 
     if (name === '') {
       const saved = await $.store.get('look')
