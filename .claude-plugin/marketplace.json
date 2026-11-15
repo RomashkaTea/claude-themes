@@ -1,0 +1,5 @@
+{
+  "name": "claude-themes",
+  "owner": { "name": "RomashkaTea" },
+  "plugins": [{ "name": "themes", "source": "./" }]
+}
