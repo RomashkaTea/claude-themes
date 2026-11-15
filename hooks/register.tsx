@@ -2,12 +2,18 @@ import type { EngineInterface, Register, ThemeSetArgs } from 'claude-code'
 
 import { AURORA, AURORA_PROBLEMS, AURORA_SCENE } from './aurora.js'
 import { CATPPUCCIN, CATPPUCCIN_PROBLEMS } from './catppuccin.js'
+import { SPACE, SPACE_PROBLEMS, SPACE_SCENE } from './space.js'
 import { TOKYO_NIGHT, TOKYO_NIGHT_PROBLEMS } from './tokyo-night.js'
 
 const LOOKS: Record<string, { look: ThemeSetArgs; problems: string[] }> = {
   aurora: { look: AURORA, problems: AURORA_PROBLEMS },
   catppuccin: { look: CATPPUCCIN, problems: CATPPUCCIN_PROBLEMS },
   'tokyo-night': { look: TOKYO_NIGHT, problems: TOKYO_NIGHT_PROBLEMS },
+  space: { look: SPACE, problems: SPACE_PROBLEMS },
+}
+const SCENES: Record<string, { source: string; alt: string }> = {
+  aurora: { source: AURORA_SCENE, alt: 'Green and violet aurora drifting over a dark mountain ridge' },
+  space: { source: SPACE_SCENE, alt: 'A slowly turning starfield with nebulae, shooting stars and a ringed planet' },
 }
 const DEFAULT = 'catppuccin'
 
@@ -58,11 +64,13 @@ export const register: Register = on => {
   })
 
   on('ui.render', { component: 'Backdrop' }, ($, e, next) => {
-    if ((e.surface !== 'desktop' && e.surface !== 'mobile') || e.props.scene !== 'aurora') {
+    const scene = SCENES[e.props.scene]
+
+    if ((e.surface !== 'desktop' && e.surface !== 'mobile') || scene === undefined) {
       return next(e)
     }
     const { Svg } = $.ui.resolve(e)
 
-    return <Svg source={AURORA_SCENE} alt="Green and violet aurora drifting over a dark mountain ridge" isInteractive />
+    return <Svg source={scene.source} alt={scene.alt} isInteractive />
   })
 }
